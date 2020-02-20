@@ -9,7 +9,7 @@ use Yii;
  *
  * @property int $id
  * @property string $text
- * @property int $time
+ * @property string $time
  * @property string $authors
  * @property string $image
  * @property string $title
@@ -31,13 +31,12 @@ class News extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'text', 'time', 'authors', 'image', 'title', 'short'], 'required'],
-            [['id', 'time'], 'integer'],
+            [['text', 'time', 'authors', 'image', 'title', 'short'], 'required'],
             [['text'], 'string'],
+            [['time'], 'safe'],
             [['authors'], 'string', 'max' => 157],
             [['image', 'title'], 'string', 'max' => 250],
             [['short'], 'string', 'max' => 300],
-            [['id'], 'unique'],
         ];
     }
 
