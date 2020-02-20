@@ -8,6 +8,9 @@ use common\modules\news\models\searches\NewsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use common\modules\roles\models\ACLRole;
+use yii\web\UploadedFile;
+use common\components\helpers\Upload;
+
 
 /**
  * NewsController implements the CRUD actions for News model.
@@ -51,8 +54,13 @@ class NewsController extends Controller
     {
         $model = new News();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            if(($f = UploadedFile::getInstance($model, 'image')))
+            {
+                $model->image = Upload::file($f, 'news', true);
+                if($model->save())
             return $this->redirect(['view', 'id' => $model->id]);
+            }
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -70,7 +78,7 @@ class NewsController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post() && $model->save())) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
